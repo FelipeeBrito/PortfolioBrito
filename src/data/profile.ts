@@ -6,8 +6,8 @@ export const profile = {
   role: 'Processos, Qualidade & Desenvolvimento com IA',
   headline: 'Crio soluções digitais com IA — automações, sistemas e ferramentas que resolvem problemas reais.',
   about: [
-    'Este laboratório reúne os projetos que desenvolvo com o apoio de inteligência artificial.',
-    'Cada módulo abaixo é um experimento que saiu do papel: da ideia ao código publicado.',
+    'Trabalho com processos e qualidade e uso inteligência artificial para transformar problemas do dia a dia em soluções digitais: automações, sistemas e ferramentas.',
+    'Este portfólio reúne esses projetos — cada um saiu do papel com a ajuda da IA, da ideia ao código publicado.',
   ],
   github: 'FelipeeBrito',
   email: 'seu-email@exemplo.com',

@@ -15,6 +15,15 @@ npm run dev
 ```
 Abra http://localhost:4321/PortfolioBrito/
 
+## Páginas
+| Página | Arquivo |
+|---|---|
+| Início (apresentação + robô) | `src/pages/index.astro` |
+| Projetos | `src/pages/projetos/index.astro` |
+| Sobre + Skills | `src/pages/sobre/index.astro` |
+| Contato | `src/pages/contato/index.astro` |
+| Menu, rodapé e robô (todas as páginas) | `src/layouts/Base.astro` |
+
 > No Windows/PowerShell, se aparecer erro de "execução de scripts", use `npm.cmd install` e `npm.cmd run dev`.
 
 ## Onde editar

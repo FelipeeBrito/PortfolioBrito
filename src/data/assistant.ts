@@ -2,23 +2,23 @@
  * FALAS DO ASSISTENTE — edite aqui os textos do robô.
  */
 export const assistant = {
-  greeting: 'Olá! 👋 Eu sou seu guia neste portfólio. Clique em mim para navegar.',
+  /** O que o robô diz ao abrir cada página. */
+  pages: {
+    inicio: { title: 'Olá! 👋', say: 'Eu sou seu guia neste portfólio. Clique em mim ou em "Vamos lá?" para navegar.' },
+    projetos: { title: '🚀 Meus projetos', say: 'Passe o mouse sobre um projeto e eu apresento os detalhes. Quer filtrar por tecnologia?' },
+    sobre: { title: 'Sobre o Felipe', say: 'Aqui você conhece o Felipe e as habilidades dele.' },
+    contato: { title: 'Contato', say: 'Deixe sua mensagem no formulário. Eu entrego para ele! ✉️' },
+  },
   idle: 'Precisa de ajuda? Clique em mim! 👋',
   menuIntro: 'Para onde vamos?',
-  about:
-    'O Felipe trabalha com processos e qualidade e usa IA para criar soluções digitais: automações, sistemas e ferramentas. Este portfólio reúne esses projetos.',
-  contact: 'Deixe sua mensagem no formulário. Eu entrego para ele! ✉️',
-  projectsIntro: 'Aqui estão os projetos. Quer filtrar por tecnologia?',
   noProjects: 'Hmm, não encontrei projetos com esse filtro.',
-  sent: 'Mensagem enviada! Obrigado pelo contato.',
 
-  /** Passos do tour guiado: id da seção + o que o robô explica. */
+  /** Passos do tour guiado (passa por todas as páginas). */
   tour: [
-    { id: 'topo', say: 'Bem-vindo! Vou te mostrar o portfólio do Felipe em poucos passos.' },
-    { id: 'sobre', say: 'Aqui você conhece o Felipe e o que ele faz.' },
-    { id: 'projetos', say: 'Estes são os projetos criados com IA. Passe o mouse em um e eu apresento os detalhes.' },
-    { id: 'habilidades', say: 'As habilidades que fazem os projetos acontecerem.' },
-    { id: 'contato', say: 'E aqui você fala com ele. Fim do tour, obrigado pela visita! 🎉' },
+    { page: 'inicio', say: 'Bem-vindo! Vou te mostrar o portfólio do Felipe em poucos passos.' },
+    { page: 'sobre', say: 'Aqui você conhece o Felipe e as habilidades que fazem os projetos acontecerem.' },
+    { page: 'projetos', say: 'Estes são os projetos criados com IA. Passe o mouse em um e eu apresento os detalhes.' },
+    { page: 'contato', say: 'E aqui você fala com ele. Fim do tour, obrigado pela visita! 🎉' },
   ],
 
   jokes: [
@@ -28,4 +28,4 @@ export const assistant = {
     'Um robô entra num bar... e pede um byte.',
     'Eu não tenho bugs, tenho funcionalidades surpresa.',
   ],
-}
+} as const

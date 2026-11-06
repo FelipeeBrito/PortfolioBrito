@@ -41,6 +41,10 @@ body {
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
 }
+.panel {
+  background: linear-gradient(180deg, rgba(18, 27, 56, 0.97), rgba(9, 14, 32, 0.97));
+  border: 1px solid rgba(120, 160, 255, 0.22);
+}
 .glow { box-shadow: 0 0 0 1px rgba(40, 225, 255, 0.08), 0 20px 50px -20px rgba(40, 225, 255, 0.35); }
 
 .card {
