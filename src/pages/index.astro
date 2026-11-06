@@ -31,7 +31,7 @@ const year = new Date().getFullYear()
       <ul class="flex gap-1 text-sm sm:gap-2">
         {nav.map(([id, label]) => (
           <li>
-            <a href={`#${id}`} class="rounded-full px-3 py-1.5 text-lab-muted transition hover:bg-white hover:text-lab-ink" data-say={`Indo para ${label}!`}>
+            <a href={`#${id}`} class="rounded-full px-3 py-1.5 text-lab-muted transition hover:bg-lab-panel hover:text-lab-ink" data-say={`Indo para ${label}!`}>
               {label}
             </a>
           </li>
@@ -54,27 +54,15 @@ const year = new Date().getFullYear()
           <a href="#projetos" class="btn btn-primary" data-say="Vamos ver os experimentos! 🔬">Ver projetos →</a>
           <a href="#contato" class="btn btn-ghost" data-say="Adoro conversar!">Fale comigo</a>
         </div>
+        <ul class="mt-10 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-lab-muted">
+          <li><span class="text-lab-cyan">&gt;</span> projetos: <b class="text-lab-ink">{projects.length}</b></li>
+          <li><span class="text-lab-cyan">&gt;</span> parceiro de IA: <b class="text-lab-ink">Claude</b></li>
+          <li><span class="text-lab-cyan">&gt;</span> holograma: <b class="text-[#3ddc84]">online</b></li>
+        </ul>
       </div>
 
-      <!-- console de status -->
-      <div class="lab-panel reveal p-6 font-mono text-sm" data-robot-hover="ideia" data-say="Este é o painel de controle do laboratório.">
-        <div class="mb-4 flex items-center justify-between border-b border-lab-line pb-3">
-          <span class="text-xs text-lab-muted">SYSTEM_STATUS.log</span>
-          <span class="flex gap-1.5"><i class="h-2.5 w-2.5 rounded-full bg-[#ff6b6b]"></i><i class="h-2.5 w-2.5 rounded-full bg-lab-amber"></i><i class="h-2.5 w-2.5 rounded-full bg-[#3ddc84]"></i></span>
-        </div>
-        <ul class="space-y-2 text-[13px]">
-          <li><span class="text-lab-cyan-dark">&gt;</span> inicializando assistente ........ <b class="text-[#16a34a]">OK</b></li>
-          <li><span class="text-lab-cyan-dark">&gt;</span> carregando projetos .............. <b class="text-[#16a34a]">{projects.length}</b></li>
-          <li><span class="text-lab-cyan-dark">&gt;</span> parceiro de IA ................... <b>Claude</b></li>
-          <li><span class="text-lab-cyan-dark">&gt;</span> modo .............................. <b>criativo</b></li>
-          <li class="text-lab-muted"><span class="text-lab-cyan-dark">&gt;</span> aguardando visitante<span class="animate-pulse">_</span></li>
-        </ul>
-        <div class="mt-6 grid grid-cols-3 gap-3 text-center">
-          <div class="rounded-xl bg-lab-bg p-3"><b class="block text-2xl text-lab-ink">{projects.length}</b><span class="text-[10px] uppercase text-lab-muted">projetos</span></div>
-          <div class="rounded-xl bg-lab-bg p-3"><b class="block text-2xl text-lab-ink">IA</b><span class="text-[10px] uppercase text-lab-muted">assistida</span></div>
-          <div class="rounded-xl bg-lab-bg p-3"><b class="block text-2xl text-lab-ink">∞</b><span class="text-[10px] uppercase text-lab-muted">ideias</span></div>
-        </div>
-      </div>
+      <!-- o robô holograma é desenhado sobre este espaço (ver Robot.tsx) -->
+      <div id="holo-anchor" class="relative mx-auto aspect-square w-full max-w-[520px]" aria-hidden="true"></div>
     </section>
 
     <!-- ===== SOBRE ===== -->

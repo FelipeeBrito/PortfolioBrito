@@ -1,6 +1,7 @@
 # PortfolioBrito 🤖
 
-Portfólio em formato de **laboratório de robótica**, com um assistente robô que reage ao visitante.
+Portfólio em formato de **laboratório de robótica**, com um assistente robô **holográfico** (feito de partículas) que reage ao visitante.
+As imagens em `public/robot` são escaneadas e viram partículas; ao trocar de pose, as partículas se reorganizam.
 Aqui ficam publicados os projetos criados com IA (Claude).
 
 ## Tecnologias

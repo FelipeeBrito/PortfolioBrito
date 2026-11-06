@@ -2,14 +2,14 @@
 
 /* ===== Paleta do laboratório (cores do robô) ===== */
 @theme {
-  --color-lab-bg: #f3f8fc;
-  --color-lab-panel: #ffffff;
-  --color-lab-ink: #10243a;
-  --color-lab-muted: #5b7086;
-  --color-lab-line: #d6e4ef;
+  --color-lab-bg: #050b18;
+  --color-lab-panel: #0a1528;
+  --color-lab-ink: #e6f4ff;
+  --color-lab-muted: #8aa3bd;
+  --color-lab-line: #1a2e4a;
   --color-lab-cyan: #12c8e8;
-  --color-lab-cyan-dark: #0a8fb0;
-  --color-lab-navy: #1b2a4a;
+  --color-lab-cyan-dark: #28e1ff;
+  --color-lab-navy: #12305c;
   --color-lab-amber: #f4a83a;
   --font-sans: 'Space Grotesk', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
@@ -25,8 +25,8 @@ body {
   font-family: var(--font-sans);
   /* grade de "placa de circuito" no fundo */
   background-image:
-    linear-gradient(rgba(18, 200, 232, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(18, 200, 232, 0.07) 1px, transparent 1px);
+    linear-gradient(rgba(40, 225, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(40, 225, 255, 0.05) 1px, transparent 1px);
   background-size: 32px 32px;
 }
 
@@ -41,7 +41,7 @@ body {
   background: var(--color-lab-panel);
   border: 1px solid var(--color-lab-line);
   border-radius: 18px;
-  box-shadow: 0 1px 0 #fff inset, 0 10px 30px -18px rgba(16, 36, 58, 0.35);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 20px 40px -24px rgba(0, 0, 0, 0.8);
 }
 .lab-panel::before,
 .lab-panel::after {
@@ -52,7 +52,7 @@ body {
   height: 6px;
   border-radius: 50%;
   background: var(--color-lab-line);
-  box-shadow: inset 0 0 0 1.5px #b8cad9;
+  box-shadow: inset 0 0 0 1.5px #2a4466;
 }
 .lab-panel::before { left: 10px; }
 .lab-panel::after { right: 10px; }
@@ -79,11 +79,12 @@ body {
 .btn-primary {
   background: var(--color-lab-navy);
   color: white;
-  box-shadow: 0 8px 20px -10px rgba(27, 42, 74, 0.8);
+  border: 1px solid rgba(40,225,255,0.5);
+  box-shadow: 0 0 22px -8px rgba(40, 225, 255, 0.7);
 }
 .btn-primary:hover { box-shadow: 0 12px 26px -10px rgba(18, 200, 232, 0.8); }
 .btn-ghost {
-  background: white;
+  background: var(--color-lab-panel);
   border: 1px solid var(--color-lab-line);
   color: var(--color-lab-ink);
 }
@@ -107,7 +108,7 @@ body {
 .meter {
   height: 8px;
   border-radius: 99px;
-  background: #e6eff6;
+  background: #12223a;
   overflow: hidden;
 }
 .meter > span {
