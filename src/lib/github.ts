@@ -17,6 +17,9 @@ export async function fetchRepos(user: string): Promise<Project[]> {
         url: r.homepage || undefined,
         repo: r.html_url,
         status: 'online' as const,
+        language: r.language || undefined,
+        updatedAt: r.pushed_at || r.updated_at,
+        stars: r.stargazers_count ?? 0,
       }))
   } catch {
     return []

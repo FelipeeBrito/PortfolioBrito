@@ -118,6 +118,18 @@ body {
   background: repeating-linear-gradient(90deg, var(--color-lab-cyan) 0 10px, #4fdcf3 10px 14px);
 }
 
+.scanline { pointer-events: none; position: absolute; inset: 0; border-radius: inherit; overflow: hidden; opacity: 0; }
+.scanline::after {
+  content: ''; position: absolute; left: 0; right: 0; height: 40%;
+  background: linear-gradient(180deg, transparent, rgba(40, 225, 255, 0.18), transparent);
+  animation: scan 1.2s linear infinite;
+}
+.is-scanning { border-color: var(--color-lab-cyan) !important; box-shadow: 0 0 30px -8px rgba(40, 225, 255, 0.6); }
+.is-scanning .scanline { opacity: 1; }
+@keyframes scan { from { top: -40%; } to { top: 100%; } }
+
+.tour-focus { outline: 1px dashed rgba(40, 225, 255, 0.5); outline-offset: 12px; border-radius: 18px; }
+
 /* Aparecer ao rolar */
 .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .reveal.in { opacity: 1; transform: none; }

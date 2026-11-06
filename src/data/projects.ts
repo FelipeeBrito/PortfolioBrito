@@ -10,6 +10,10 @@ export interface Project {
   url?: string
   repo?: string
   status?: 'online' | 'em teste' | 'em construção'
+  /** Preenchidos automaticamente pelo GitHub (usados no escaneamento do robô) */
+  language?: string
+  updatedAt?: string
+  stars?: number
 }
 
 export const featured: Project[] = [
