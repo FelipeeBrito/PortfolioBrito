@@ -1,12 +1,13 @@
 # PortfolioBrito 🤖
 
-Portfólio em formato de **laboratório de robótica**, com um **robô guia** que apresenta o portfólio (menu, tour, escaneamento dos projetos) e um fundo de "tecido de luz" feito de partículas.
-Aqui ficam publicados os projetos criados com IA (Claude).
+Portfólio em que uma **IA feita de partículas** conversa com o visitante. Ao escolher uma opção,
+o robô holograma se desfaz, as partículas formam a seção escolhida e depois voltam a ser o
+robô, pequeno no canto.
 
 ## Tecnologias
-- [Astro](https://astro.build) + TypeScript — site estático e rápido
-- React + [Motion](https://motion.dev) — o robô interativo
-- Tailwind CSS — visual
+- [Astro](https://astro.build) + TypeScript (site estático)
+- Canvas 2D para as partículas (sem bibliotecas 3D)
+- Tailwind CSS
 
 ## Rodar no computador
 ```bash
@@ -15,36 +16,18 @@ npm run dev
 ```
 Abra http://localhost:4321/PortfolioBrito/
 
-## Páginas
-| Página | Arquivo |
-|---|---|
-| Início (apresentação + robô) | `src/pages/index.astro` |
-| Projetos | `src/pages/projetos/index.astro` |
-| Sobre + Skills | `src/pages/sobre/index.astro` |
-| Contato | `src/pages/contato/index.astro` |
-| Menu, rodapé e robô (todas as páginas) | `src/layouts/Base.astro` |
-
 > No Windows/PowerShell, se aparecer erro de "execução de scripts", use `npm.cmd install` e `npm.cmd run dev`.
 
 ## Onde editar
 | O quê | Arquivo |
 |---|---|
+| Falas da IA e botões da conversa | `src/data/conversa.ts` |
 | Nome, cargo, textos, e-mail, LinkedIn | `src/data/profile.ts` |
-| Projetos em destaque | `src/data/projects.ts` (os repositórios públicos do GitHub entram sozinhos) |
+| Projetos em destaque (os repositórios do GitHub entram sozinhos) | `src/data/projects.ts` |
 | Habilidades | `src/data/skills.ts` |
-| Falas do robô (menu, tour, piadas) | `src/data/assistant.ts` |
-| Comportamento do robô | `src/components/Robot.tsx` |
-| Fundo de partículas do topo | `src/components/WovenField.tsx` |
-| Imagens do robô | `public/robot/*.webp` |
+| Conteúdo e layout das seções | `src/pages/index.astro` |
+| Navegação e transições | `src/scripts/app.ts` |
+| Motor de partículas do robô | `src/scripts/holo.ts` |
+| Imagem do robô (vira partículas) | `public/robot/holo.webp` |
 
-## Como o robô reage
-| Ação do visitante | Pose |
-|---|---|
-| Chega no site / fica parado | acenando |
-| Clica no robô ou em "Vamos lá?" | apontando (abre o menu) |
-| Passa o mouse num projeto | apresentando (escaneia e mostra dados do GitHub) |
-| Filtro sem resultados | sentado |
-| Envia o formulário de contato | envelope |
-
-Para ligar o robô a qualquer elemento, use atributos no HTML:
-`data-robot-hover="ideia"`, `data-robot-click="legal"`, `data-robot-section="lendo"` e `data-say="texto da fala"`.
+Endereços das seções: `#projetos`, `#sobre`, `#contato`, `#tudo` (tudo sem conversa).

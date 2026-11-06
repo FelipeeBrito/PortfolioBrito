@@ -19,8 +19,8 @@ export interface Project {
 export const featured: Project[] = [
   {
     name: 'PortfolioBrito',
-    description: 'Este site: um laboratório de robótica interativo, com um robô guia que apresenta os projetos e reage ao visitante.',
-    tags: ['Astro', 'React', 'IA'],
+    description: 'Este portfólio: uma IA feita de partículas que conversa com o visitante e monta cada seção.',
+    tags: ['Astro', 'Canvas', 'IA'],
     repo: 'https://github.com/FelipeeBrito/PortfolioBrito',
     status: 'online',
   },
