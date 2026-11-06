@@ -1,141 +1,131 @@
 @import 'tailwindcss';
 
-/* ===== Paleta do laboratório (cores do robô) ===== */
+/* ===== Paleta neon (cores do robô) ===== */
 @theme {
-  --color-lab-bg: #050b18;
-  --color-lab-panel: #0a1528;
-  --color-lab-ink: #e6f4ff;
-  --color-lab-muted: #8aa3bd;
-  --color-lab-line: #1a2e4a;
-  --color-lab-cyan: #12c8e8;
+  --color-lab-bg: #04060f;
+  --color-lab-panel: #0b1124;
+  --color-lab-ink: #dbe7ff;
+  --color-lab-muted: #8b9bbf;
+  --color-lab-line: rgba(255, 255, 255, 0.08);
+  --color-lab-cyan: #28e1ff;
   --color-lab-cyan-dark: #28e1ff;
-  --color-lab-navy: #12305c;
-  --color-lab-amber: #f4a83a;
-  --font-sans: 'Space Grotesk', system-ui, sans-serif;
+  --color-lab-blue: #2f6bff;
+  --color-lab-violet: #9b7bff;
+  --color-lab-navy: #0f2a5c;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Instrument Serif', Georgia, serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
   background-color: var(--color-lab-bg);
   color: var(--color-lab-ink);
   font-family: var(--font-sans);
-  /* grade de "placa de circuito" no fundo */
   background-image:
-    linear-gradient(rgba(40, 225, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(40, 225, 255, 0.05) 1px, transparent 1px);
-  background-size: 32px 32px;
+    radial-gradient(60rem 40rem at 85% -10%, rgba(47, 107, 255, 0.16), transparent 60%),
+    radial-gradient(50rem 30rem at -10% 40%, rgba(155, 123, 255, 0.08), transparent 60%),
+    radial-gradient(40rem 30rem at 100% 80%, rgba(40, 225, 255, 0.06), transparent 60%);
+  background-attachment: fixed;
 }
 
-::selection {
-  background: var(--color-lab-cyan);
-  color: white;
-}
+::selection { background: var(--color-lab-cyan); color: #04060f; }
 
-/* Painel com cantos "parafusados" */
-.lab-panel {
+.font-display { font-family: var(--font-display); font-weight: 400; letter-spacing: -0.01em; }
+
+/* ===== Vidro (glassmorphism) ===== */
+.glass {
+  background: linear-gradient(180deg, rgba(20, 30, 60, 0.55), rgba(10, 16, 36, 0.55));
+  border: 1px solid rgba(120, 160, 255, 0.16);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.glow { box-shadow: 0 0 0 1px rgba(40, 225, 255, 0.08), 0 20px 50px -20px rgba(40, 225, 255, 0.35); }
+
+.card {
   position: relative;
-  background: var(--color-lab-panel);
-  border: 1px solid var(--color-lab-line);
-  border-radius: 18px;
-  box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 20px 40px -24px rgba(0, 0, 0, 0.8);
+  border-radius: 22px;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
-.lab-panel::before,
-.lab-panel::after {
-  content: '';
-  position: absolute;
-  top: 10px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--color-lab-line);
-  box-shadow: inset 0 0 0 1.5px #2a4466;
+.card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(40, 225, 255, 0.45);
+  box-shadow: 0 0 0 1px rgba(40, 225, 255, 0.2), 0 25px 60px -25px rgba(40, 225, 255, 0.55);
 }
-.lab-panel::before { left: 10px; }
-.lab-panel::after { right: 10px; }
 
-.tag {
+.eyebrow {
   font-family: var(--font-mono);
   font-size: 11px;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--color-lab-cyan-dark);
+  color: var(--color-lab-cyan);
 }
 
+/* ===== Botões "pílula" neon ===== */
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
   border-radius: 999px;
-  padding: 0.8rem 1.4rem;
+  padding: 0.85rem 1.5rem;
   font-weight: 600;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  font-size: 0.95rem;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s;
 }
 .btn:hover { transform: translateY(-2px); }
 .btn:active { transform: translateY(0) scale(0.98); }
 .btn-primary {
-  background: var(--color-lab-navy);
-  color: white;
-  border: 1px solid rgba(40,225,255,0.5);
-  box-shadow: 0 0 22px -8px rgba(40, 225, 255, 0.7);
+  color: #fff;
+  border: 1.5px solid var(--color-lab-cyan);
+  background: rgba(40, 225, 255, 0.06);
+  box-shadow: 0 0 18px -4px rgba(40, 225, 255, 0.6), inset 0 0 12px -4px rgba(40, 225, 255, 0.5);
 }
-.btn-primary:hover { box-shadow: 0 12px 26px -10px rgba(18, 200, 232, 0.8); }
-.btn-ghost {
-  background: var(--color-lab-panel);
-  border: 1px solid var(--color-lab-line);
-  color: var(--color-lab-ink);
-}
-.btn-ghost:hover { border-color: var(--color-lab-cyan); }
+.btn-primary:hover { background: rgba(40, 225, 255, 0.14); box-shadow: 0 0 28px -2px rgba(40, 225, 255, 0.8), inset 0 0 14px -4px rgba(40, 225, 255, 0.6); }
+.btn-ghost { color: var(--color-lab-ink); border: 1px solid rgba(255, 255, 255, 0.14); background: rgba(255, 255, 255, 0.03); }
+.btn-ghost:hover { border-color: rgba(255, 255, 255, 0.35); color: #fff; }
 
-/* LED piscando */
-.led {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #3ddc84;
-  box-shadow: 0 0 0 3px rgba(61, 220, 132, 0.2);
-  animation: blink 2.4s infinite;
-}
-@keyframes blink {
-  0%, 90%, 100% { opacity: 1; }
-  95% { opacity: 0.3; }
-}
+.led { width: 7px; height: 7px; border-radius: 50%; background: #3ddc84; box-shadow: 0 0 8px #3ddc84; animation: blink 2.4s infinite; }
+@keyframes blink { 0%, 90%, 100% { opacity: 1; } 95% { opacity: 0.3; } }
 
-/* Barra de "carga" das habilidades */
-.meter {
-  height: 8px;
-  border-radius: 99px;
-  background: #12223a;
-  overflow: hidden;
-}
-.meter > span {
-  display: block;
-  height: 100%;
-  border-radius: 99px;
-  background: repeating-linear-gradient(90deg, var(--color-lab-cyan) 0 10px, #4fdcf3 10px 14px);
-}
+.meter { height: 6px; border-radius: 99px; background: rgba(255, 255, 255, 0.06); overflow: hidden; }
+.meter > span { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--color-lab-blue), var(--color-lab-cyan)); box-shadow: 0 0 10px rgba(40, 225, 255, 0.6); }
 
-.scanline { pointer-events: none; position: absolute; inset: 0; border-radius: inherit; overflow: hidden; opacity: 0; }
-.scanline::after {
-  content: ''; position: absolute; left: 0; right: 0; height: 40%;
-  background: linear-gradient(180deg, transparent, rgba(40, 225, 255, 0.18), transparent);
-  animation: scan 1.2s linear infinite;
-}
-.is-scanning { border-color: var(--color-lab-cyan) !important; box-shadow: 0 0 30px -8px rgba(40, 225, 255, 0.6); }
+/* ===== Escaneamento de projetos ===== */
+.scanline { pointer-events: none; position: absolute; inset: 0; border-radius: inherit; overflow: hidden; opacity: 0; z-index: 2; }
+.scanline::after { content: ''; position: absolute; left: 0; right: 0; height: 40%; background: linear-gradient(180deg, transparent, rgba(40, 225, 255, 0.16), transparent); animation: scan 1.2s linear infinite; }
+.is-scanning { border-color: var(--color-lab-cyan) !important; box-shadow: 0 0 40px -10px rgba(40, 225, 255, 0.7) !important; }
 .is-scanning .scanline { opacity: 1; }
 @keyframes scan { from { top: -40%; } to { top: 100%; } }
 
-.tour-focus { outline: 1px dashed rgba(40, 225, 255, 0.5); outline-offset: 12px; border-radius: 18px; }
+.tour-focus { outline: 1px dashed rgba(40, 225, 255, 0.45); outline-offset: 14px; border-radius: 24px; }
+
+/* ===== Robô ===== */
+.robot-float { animation: float 3.4s ease-in-out infinite; }
+@keyframes float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -4%; } }
+/* chama do jato embaixo do robô */
+.robot-jet {
+  position: absolute; left: 50%; bottom: -10%; width: 34%; height: 30%;
+  translate: -50% 0; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(120, 230, 255, 0.85), rgba(40, 140, 255, 0.35) 55%, transparent);
+  filter: blur(6px);
+  animation: jet 0.18s ease-in-out infinite alternate;
+}
+@keyframes jet { from { opacity: 0.7; transform: scaleY(0.9); } to { opacity: 1; transform: scaleY(1.08); } }
+/* efeito de "projeção" ao trocar de pose: revela de baixo para cima com brilho ciano */
+.robot-materialize { animation: materialize 0.55s ease-out; }
+@keyframes materialize {
+  0% { clip-path: inset(100% 0 0 0); filter: brightness(2.2) saturate(0) drop-shadow(0 0 12px #28e1ff); }
+  60% { clip-path: inset(0 0 0 0); filter: brightness(1.5) drop-shadow(0 0 16px #28e1ff); }
+  100% { clip-path: inset(0 0 0 0); filter: none; }
+}
 
 /* Aparecer ao rolar */
-.reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s ease, transform 0.7s ease; }
 .reveal.in { opacity: 1; transform: none; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; transition: none; }
-  .led { animation: none; }
+  .led, .robot-float, .robot-jet, .robot-materialize, .scanline::after { animation: none; }
 }

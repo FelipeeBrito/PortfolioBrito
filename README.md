@@ -1,7 +1,6 @@
 # PortfolioBrito 🤖
 
-Portfólio em formato de **laboratório de robótica**, com um assistente robô **holográfico** (feito de partículas) que reage ao visitante.
-As imagens em `public/robot` são escaneadas e viram partículas; ao trocar de pose, as partículas se reorganizam.
+Portfólio em formato de **laboratório de robótica**, com um **robô guia** que apresenta o portfólio (menu, tour, escaneamento dos projetos) e um fundo de "tecido de luz" feito de partículas.
 Aqui ficam publicados os projetos criados com IA (Claude).
 
 ## Tecnologias
@@ -24,18 +23,19 @@ Abra http://localhost:4321/PortfolioBrito/
 | Nome, cargo, textos, e-mail, LinkedIn | `src/data/profile.ts` |
 | Projetos em destaque | `src/data/projects.ts` (os repositórios públicos do GitHub entram sozinhos) |
 | Habilidades | `src/data/skills.ts` |
-| Comportamento e falas do robô | `src/components/Robot.tsx` |
+| Falas do robô (menu, tour, piadas) | `src/data/assistant.ts` |
+| Comportamento do robô | `src/components/Robot.tsx` |
+| Fundo de partículas do topo | `src/components/WovenField.tsx` |
 | Imagens do robô | `public/robot/*.webp` |
 
 ## Como o robô reage
 | Ação do visitante | Pose |
 |---|---|
 | Chega no site / fica parado | acenando |
-| Rola até Sobre ou Projetos | lendo |
-| Passa o mouse num projeto ou habilidade | ideia |
-| Clica em botão ou link | legal |
-| Clica no robô | rindo (conta uma piada) |
-| Mexe o mouse muito rápido | surpreso |
+| Clica no robô ou em "Vamos lá?" | apontando (abre o menu) |
+| Passa o mouse num projeto | apresentando (escaneia e mostra dados do GitHub) |
+| Filtro sem resultados | sentado |
+| Envia o formulário de contato | envelope |
 
 Para ligar o robô a qualquer elemento, use atributos no HTML:
 `data-robot-hover="ideia"`, `data-robot-click="legal"`, `data-robot-section="lendo"` e `data-say="texto da fala"`.

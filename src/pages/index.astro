@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro'
 import Robot from '../components/Robot.tsx'
+import WovenField from '../components/WovenField.tsx'
 import { profile } from '../data/profile'
 import { skills } from '../data/skills'
 import { featured, type Project } from '../data/projects'
@@ -17,107 +18,109 @@ const projects: Project[] = [
   }),
   ...repos.filter((r) => !seen.has(r.name.toLowerCase())),
 ]
+// miniatura automática do GitHub (imagem de prévia do repositório)
+const thumb = (p: Project) =>
+  p.repo?.includes('github.com/') ? `https://opengraph.githubassets.com/1/${p.repo.split('github.com/')[1]}` : null
 
 const nav = [
   ['sobre', 'Sobre'],
   ['projetos', 'Projetos'],
-  ['habilidades', 'Habilidades'],
+  ['habilidades', 'Skills'],
   ['contato', 'Contato'],
 ]
 const year = new Date().getFullYear()
 ---
 
-<Base title={`${profile.name} · Laboratório de Projetos`} description={profile.headline}>
-  <!-- ===== NAVEGAÇÃO ===== -->
-  <header class="sticky top-0 z-40 border-b border-lab-line/70 bg-lab-bg/80 backdrop-blur">
-    <nav class="mx-auto flex max-w-6xl items-center justify-between px-5 py-3">
-      <a href="#topo" class="flex items-center gap-2 font-mono text-sm font-semibold">
-        <span class="grid h-8 w-8 place-items-center rounded-lg bg-lab-navy text-xs text-lab-cyan">FB</span>
-        <span class="hidden sm:inline">LAB·BRITO</span>
+<Base title={`${profile.name} · Portfólio`} description={profile.headline}>
+  <!-- ===== NAVEGAÇÃO (pílula de vidro) ===== -->
+  <header class="fixed inset-x-0 top-4 z-[45] flex justify-center px-4">
+    <nav class="glass flex w-full max-w-3xl items-center justify-between rounded-full py-2 pl-4 pr-2">
+      <a href="#topo" class="flex items-center gap-2 text-sm font-semibold text-white">
+        <span class="grid h-7 w-7 place-items-center rounded-full border border-lab-cyan/60 font-mono text-[10px] text-lab-cyan shadow-[0_0_12px_-2px_rgba(40,225,255,0.7)]">FB</span>
+        <span class="hidden sm:inline">Felipe Brito</span>
       </a>
-      <ul class="flex gap-1 text-sm sm:gap-2">
+      <ul class="flex items-center gap-0.5 text-[13px]">
         {nav.map(([id, label]) => (
-          <li>
-            <a href={`#${id}`} class="rounded-full px-3 py-1.5 text-lab-muted transition hover:bg-lab-panel hover:text-lab-ink">
-              {label}
-            </a>
-          </li>
+          <li><a href={`#${id}`} class="rounded-full px-3 py-1.5 text-lab-muted transition hover:bg-white/5 hover:text-white">{label}</a></li>
         ))}
       </ul>
     </nav>
   </header>
 
   <main id="topo">
-    <!-- ===== HERO / PAINEL PRINCIPAL ===== -->
-    <section class="mx-auto grid max-w-6xl items-center gap-10 px-5 pb-16 pt-14 lg:grid-cols-[1.15fr_1fr] lg:pt-24">
-      <div>
-        <p class="tag mb-5 flex items-center gap-2"><span class="led"></span> Laboratório online · LAB-01</p>
-        <h1 class="text-[clamp(2.4rem,6vw,4.2rem)] font-bold leading-[1.02] tracking-tight">
-          Olá, eu sou<br /><span class="text-lab-cyan-dark">{profile.name}</span>.
-        </h1>
-        <p class="mt-5 text-lg font-medium">{profile.role}</p>
-        <p class="mt-2 max-w-[46ch] text-lab-muted">{profile.headline}</p>
-        <div class="mt-8 flex flex-wrap gap-3">
-          <a href="#projetos" class="btn btn-primary">Ver projetos →</a>
-          <button type="button" class="btn btn-ghost" data-robot-action="tour">▶ Tour com o assistente</button>
+    <!-- ===== TOPO: tecido de luz + robô ===== -->
+    <section class="relative flex min-h-svh items-center overflow-hidden">
+      <WovenField client:idle />
+      <div class="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-lab-bg"></div>
+      <div class="relative mx-auto grid w-full max-w-6xl items-center gap-6 px-5 pb-16 pt-28 lg:grid-cols-[1.1fr_1fr] lg:pt-20">
+        <div>
+          <p class="eyebrow mb-6 flex items-center gap-2"><span class="led"></span> Portfólio · Projetos com IA</p>
+          <h1 class="font-display text-[clamp(3.2rem,8vw,6.5rem)] leading-[0.92] text-white">
+            {profile.name.split(' ')[0]}<br /><em class="bg-gradient-to-r from-lab-cyan via-[#7ab8ff] to-lab-violet bg-clip-text not-italic text-transparent">{profile.name.split(' ').slice(1).join(' ')}</em>
+          </h1>
+          <p class="mt-6 text-lg text-white">{profile.role}</p>
+          <p class="mt-2 max-w-[44ch] text-lab-muted">{profile.headline}</p>
+          <div class="mt-9 flex flex-wrap gap-3">
+            <button type="button" class="btn btn-primary" data-robot-action="menu">Vamos lá? <span aria-hidden="true">›</span></button>
+            <button type="button" class="btn btn-ghost" data-robot-action="tour">▶ Fazer o tour</button>
+          </div>
+          <p class="mt-10 font-mono text-xs text-lab-muted">
+            <span class="text-lab-cyan">{projects.length}</span> projeto{projects.length > 1 ? 's publicados' : ' publicado'} · criados com <span class="text-white">Claude</span>
+          </p>
         </div>
-        <ul class="mt-10 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-lab-muted">
-          <li><span class="text-lab-cyan">&gt;</span> projetos: <b class="text-lab-ink">{projects.length}</b></li>
-          <li><span class="text-lab-cyan">&gt;</span> parceiro de IA: <b class="text-lab-ink">Claude</b></li>
-          <li><span class="text-lab-cyan">&gt;</span> holograma: <b class="text-[#3ddc84]">online</b></li>
-        </ul>
+        <!-- o robô é posicionado sobre este espaço (ver Robot.tsx) -->
+        <div id="robot-anchor" class="mx-auto aspect-square w-full max-w-[260px] sm:max-w-[360px] lg:max-w-[460px]" aria-hidden="true"></div>
       </div>
-
-      <!-- o robô holograma é desenhado sobre este espaço (ver Robot.tsx) -->
-      <div id="holo-anchor" class="relative mx-auto aspect-square w-full max-w-[520px]" aria-hidden="true"></div>
     </section>
 
     <!-- ===== SOBRE ===== -->
-    <section id="sobre" class="mx-auto max-w-6xl scroll-mt-20 px-5 py-16" >
-      <p class="tag mb-2">Módulo 01</p>
-      <h2 class="text-3xl font-bold">Ficha técnica</h2>
-      <div class="lab-panel reveal mt-8 grid gap-6 p-8 md:grid-cols-[auto_1fr]">
-        <div class="grid h-24 w-24 place-items-center rounded-2xl bg-lab-navy font-mono text-2xl font-bold text-lab-cyan">FB</div>
-        <div class="space-y-3 text-lab-muted">
+    <section id="sobre" class="mx-auto max-w-6xl scroll-mt-24 px-5 py-20">
+      <p class="eyebrow mb-3">01 · Sobre mim</p>
+      <h2 class="font-display text-5xl text-white">Quem está por trás</h2>
+      <div class="glass card reveal mt-10 grid gap-8 p-8 md:grid-cols-[auto_1fr] md:p-10">
+        <div class="grid h-28 w-28 place-items-center rounded-3xl border border-lab-cyan/40 bg-lab-navy/40 font-display text-5xl text-lab-cyan shadow-[0_0_40px_-10px_rgba(40,225,255,0.6)]">FB</div>
+        <div class="space-y-4 text-lg leading-relaxed text-lab-muted">
           {profile.about.map((p) => <p>{p}</p>)}
         </div>
       </div>
     </section>
 
     <!-- ===== PROJETOS ===== -->
-    <section id="projetos" class="mx-auto max-w-6xl scroll-mt-20 px-5 py-16" data-robot-section="lendo" data-say="Passe o mouse sobre um projeto e eu escaneio os detalhes para você. 🔍">
-      <p class="tag mb-2">Módulo 02</p>
-      <h2 class="text-3xl font-bold">Experimentos</h2>
-      <p class="mt-2 text-lab-muted">Projetos criados com IA. Passe o mouse para o assistente te contar sobre cada um.</p>
+    <section id="projetos" class="mx-auto max-w-6xl scroll-mt-24 px-5 py-20" data-robot-section="apresentando" data-title="🚀 Meus projetos" data-say="Passe o mouse sobre um projeto e eu apresento os detalhes.">
+      <p class="eyebrow mb-3">02 · Projetos</p>
+      <h2 class="font-display text-5xl text-white">Meus projetos</h2>
+      <p class="mt-3 max-w-xl text-lab-muted">Tudo aqui foi criado com o apoio de inteligência artificial — da ideia ao código publicado.</p>
       <div id="filtro" class="mt-6 hidden items-center gap-3 font-mono text-xs text-lab-muted">
-        filtro ativo: <b id="filtro-nome" class="text-lab-cyan"></b>
-        <button type="button" data-robot-action="clear-filter" class="rounded-full border border-lab-line px-3 py-1 hover:border-lab-cyan hover:text-lab-ink">limpar ✕</button>
+        filtro: <b id="filtro-nome" class="text-lab-cyan"></b>
+        <button type="button" data-robot-action="clear-filter" class="rounded-full border border-white/10 px-3 py-1 hover:border-lab-cyan hover:text-white">limpar ✕</button>
       </div>
-      <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((p, i) => (
           <article
-            class="lab-panel reveal group flex flex-col p-6 pt-8 transition hover:-translate-y-1 hover:border-lab-cyan"
+            class="glass card reveal group flex flex-col overflow-hidden"
             data-robot-scan
             data-name={p.name}
-            data-exp={`EXP-${String(i + 1).padStart(2, '0')}`}
+            data-exp={`Projeto ${String(i + 1).padStart(2, '0')}`}
             data-tags={p.tags.join('|').toLowerCase()}
             data-lang={p.language ?? p.tags[0] ?? ''}
             data-updated={p.updatedAt ?? ''}
             data-stars={p.stars ?? ''}
           >
             <span class="scanline" aria-hidden="true"></span>
-            <div class="mb-3 flex items-center justify-between">
-              <span class="font-mono text-xs text-lab-muted">EXP-{String(i + 1).padStart(2, '0')}</span>
-              <span class="flex items-center gap-1.5 font-mono text-[10px] uppercase text-lab-muted"><span class="led"></span>{p.status ?? 'online'}</span>
+            <div class="relative aspect-[16/9] overflow-hidden border-b border-white/5 bg-gradient-to-br from-lab-navy via-[#1b1f5c] to-[#3a1d6e]">
+              {thumb(p) && <img src={thumb(p)} alt="" loading="lazy" class="h-full w-full object-cover opacity-80 transition duration-500 group-hover:scale-105 group-hover:opacity-100" onerror="this.remove()" />}
+              <span class="absolute left-3 top-3 flex items-center gap-1.5 rounded-full bg-black/50 px-2.5 py-1 font-mono text-[10px] uppercase text-white backdrop-blur"><span class="led"></span>{p.status ?? 'online'}</span>
             </div>
-            <h3 class="text-lg font-semibold group-hover:text-lab-cyan-dark">{p.name}</h3>
-            <p class="mt-2 flex-1 text-sm text-lab-muted">{p.description}</p>
-            <div class="mt-4 flex flex-wrap gap-1.5">
-              {p.tags.map((t) => <span class="rounded-full bg-lab-bg px-2.5 py-1 font-mono text-[11px] text-lab-cyan-dark">{t}</span>)}
-            </div>
-            <div class="mt-5 flex gap-4 text-sm font-semibold">
-              {p.url && <a href={p.url} target="_blank" rel="noopener" class="text-lab-ink hover:text-lab-cyan-dark">Abrir ↗</a>}
-              {p.repo && <a href={p.repo} target="_blank" rel="noopener" class="text-lab-muted hover:text-lab-ink">Código</a>}
+            <div class="flex flex-1 flex-col p-6">
+              <h3 class="text-lg font-semibold text-white">{p.name}</h3>
+              <p class="mt-2 flex-1 text-sm leading-relaxed text-lab-muted">{p.description}</p>
+              <div class="mt-4 flex flex-wrap gap-1.5">
+                {p.tags.map((t) => <span class="rounded-full border border-lab-cyan/25 bg-lab-cyan/5 px-2.5 py-0.5 text-[11px] text-lab-cyan">{t}</span>)}
+              </div>
+              <div class="mt-5 flex gap-2">
+                {p.url && <a href={p.url} target="_blank" rel="noopener" class="btn btn-primary !px-4 !py-2 text-sm">Ver projeto ›</a>}
+                {p.repo && <a href={p.repo} target="_blank" rel="noopener" class="btn btn-ghost !px-4 !py-2 text-sm">Código</a>}
+              </div>
             </div>
           </article>
         ))}
@@ -125,17 +128,17 @@ const year = new Date().getFullYear()
     </section>
 
     <!-- ===== HABILIDADES ===== -->
-    <section id="habilidades" class="mx-auto max-w-6xl scroll-mt-20 px-5 py-16" >
-      <p class="tag mb-2">Módulo 03</p>
-      <h2 class="text-3xl font-bold">Componentes instalados</h2>
-      <div class="mt-8 grid gap-5 md:grid-cols-3">
+    <section id="habilidades" class="mx-auto max-w-6xl scroll-mt-24 px-5 py-20">
+      <p class="eyebrow mb-3">03 · Skills</p>
+      <h2 class="font-display text-5xl text-white">Habilidades</h2>
+      <div class="mt-10 grid gap-6 md:grid-cols-3">
         {skills.map((g) => (
-          <div class="lab-panel reveal p-6 pt-8">
-            <h3 class="tag mb-4">{g.group}</h3>
-            <ul class="space-y-4">
+          <div class="glass card reveal p-7">
+            <h3 class="eyebrow mb-5">{g.group}</h3>
+            <ul class="space-y-5">
               {g.items.map((s) => (
                 <li>
-                  <div class="mb-1.5 flex justify-between text-sm"><span>{s.name}</span><span class="font-mono text-xs text-lab-muted">{s.level}%</span></div>
+                  <div class="mb-2 flex justify-between text-sm"><span class="text-white">{s.name}</span><span class="font-mono text-xs text-lab-muted">{s.level}%</span></div>
                   <div class="meter"><span style={`width:${s.level}%`}></span></div>
                 </li>
               ))}
@@ -146,42 +149,47 @@ const year = new Date().getFullYear()
     </section>
 
     <!-- ===== CONTATO ===== -->
-    <section id="contato" class="mx-auto max-w-6xl scroll-mt-20 px-5 py-16 pb-32" >
-      <p class="tag mb-2">Módulo 04</p>
-      <h2 class="text-3xl font-bold">Canal de comunicação</h2>
-      <div class="mt-8 grid gap-5 lg:grid-cols-[1.4fr_1fr]">
-        <form id="contact" class="lab-panel reveal space-y-4 p-6 pt-8">
+    <section id="contato" class="mx-auto max-w-6xl scroll-mt-24 px-5 py-20 pb-36">
+      <p class="eyebrow mb-3">04 · Contato</p>
+      <h2 class="font-display text-5xl text-white">Vamos conversar?</h2>
+      <div class="mt-10 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+        <form id="contact" class="glass card reveal space-y-4 p-7">
           <div class="grid gap-4 sm:grid-cols-2">
-            <label class="block text-sm">Nome<input required name="nome" class="mt-1 w-full rounded-xl border border-lab-line bg-lab-bg px-4 py-2.5 outline-none focus:border-lab-cyan" /></label>
-            <label class="block text-sm">E-mail<input required type="email" name="email" class="mt-1 w-full rounded-xl border border-lab-line bg-lab-bg px-4 py-2.5 outline-none focus:border-lab-cyan" /></label>
+            <label class="block text-sm text-lab-muted">Nome<input required name="nome" class="mt-1.5 w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none transition focus:border-lab-cyan focus:shadow-[0_0_0_3px_rgba(40,225,255,0.15)]" /></label>
+            <label class="block text-sm text-lab-muted">E-mail<input required type="email" name="email" class="mt-1.5 w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none transition focus:border-lab-cyan focus:shadow-[0_0_0_3px_rgba(40,225,255,0.15)]" /></label>
           </div>
-          <label class="block text-sm">Mensagem<textarea required name="mensagem" rows="4" class="mt-1 w-full rounded-xl border border-lab-line bg-lab-bg px-4 py-2.5 outline-none focus:border-lab-cyan"></textarea></label>
-          <button type="submit" class="btn btn-primary">Transmitir mensagem</button>
+          <label class="block text-sm text-lab-muted">Mensagem<textarea required name="mensagem" rows="4" class="mt-1.5 w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none transition focus:border-lab-cyan focus:shadow-[0_0_0_3px_rgba(40,225,255,0.15)]"></textarea></label>
+          <div class="flex flex-wrap items-center gap-4">
+            <button type="submit" class="btn btn-primary">Enviar mensagem ›</button>
+            <p id="sent" class="hidden items-center gap-2 text-sm text-[#3ddc84]"><span class="grid h-5 w-5 place-items-center rounded-full bg-[#3ddc84] text-[11px] text-black">✓</span> Mensagem enviada!</p>
+          </div>
         </form>
-        <div class="lab-panel reveal space-y-4 p-6 pt-8 text-sm">
-          <h3 class="tag">Frequências diretas</h3>
-          <a href={`https://github.com/${profile.github}`} target="_blank" rel="noopener" class="flex items-center justify-between rounded-xl bg-lab-bg px-4 py-3 hover:text-lab-cyan-dark">GitHub <span>↗</span></a>
-          <a href={profile.linkedin} target="_blank" rel="noopener" class="flex items-center justify-between rounded-xl bg-lab-bg px-4 py-3 hover:text-lab-cyan-dark">LinkedIn <span>↗</span></a>
-          <a href={`mailto:${profile.email}`} class="flex items-center justify-between rounded-xl bg-lab-bg px-4 py-3 hover:text-lab-cyan-dark">E-mail <span>↗</span></a>
+        <div class="glass card reveal flex flex-col gap-3 p-7 text-sm">
+          <h3 class="eyebrow mb-1">Canais diretos</h3>
+          <a href={`https://github.com/${profile.github}`} target="_blank" rel="noopener" class="flex items-center justify-between rounded-xl border border-white/5 bg-white/[0.03] px-4 py-3.5 text-white transition hover:border-lab-cyan/50">GitHub <span class="text-lab-cyan">↗</span></a>
+          <a href={profile.linkedin} target="_blank" rel="noopener" class="flex items-center justify-between rounded-xl border border-white/5 bg-white/[0.03] px-4 py-3.5 text-white transition hover:border-lab-cyan/50">LinkedIn <span class="text-lab-cyan">↗</span></a>
+          <a href={`mailto:${profile.email}`} class="flex items-center justify-between rounded-xl border border-white/5 bg-white/[0.03] px-4 py-3.5 text-white transition hover:border-lab-cyan/50">E-mail <span class="text-lab-cyan">↗</span></a>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="border-t border-lab-line py-8 text-center font-mono text-xs text-lab-muted">
-    © {year} {profile.name} · construído com Astro + Claude · assistente robô v1.0
+  <footer class="border-t border-white/5 py-8 text-center font-mono text-xs text-lab-muted">
+    © {year} {profile.name} · feito com Astro + Claude
   </footer>
 
   <Robot client:idle />
 
   <script define:vars={{ email: profile.email }}>
-    // Formulário: abre o e-mail do visitante já preenchido e o robô comemora
+    // Formulário: abre o e-mail do visitante já preenchido e o robô mostra o envelope
     document.getElementById('contact')?.addEventListener('submit', (e) => {
       e.preventDefault()
       const f = new FormData(e.target)
       const body = `${f.get('mensagem')}\n\n— ${f.get('nome')} (${f.get('email')})`
       window.location.href = `mailto:${email}?subject=${encodeURIComponent('Contato pelo portfólio')}&body=${encodeURIComponent(body)}`
-      window.dispatchEvent(new CustomEvent('robot', { detail: { pose: 'legal', say: 'Mensagem pronta para envio! Obrigado! 🎉' } }))
+      window.dispatchEvent(new CustomEvent('robot', { detail: { pose: 'envelope', title: '✅ Mensagem enviada!', say: 'Obrigado pelo contato!' } }))
+      const ok = document.getElementById('sent')
+      if (ok) ok.style.display = 'flex'
       e.target.reset()
     })
   </script>
