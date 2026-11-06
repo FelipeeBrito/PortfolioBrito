@@ -1,0 +1,31 @@
+---
+import '../styles/global.css'
+interface Props { title: string; description: string }
+const { title, description } = Astro.props
+const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f3f8fc" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={`${base}/robot/acenando.webp`} />
+    <link rel="icon" type="image/webp" href={`${base}/robot/acenando.webp`} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <title>{title}</title>
+  </head>
+  <body class="antialiased">
+    <slot />
+    <script>
+      // animação de "aparecer ao rolar"
+      const io = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting && (e.target.classList.add('in'), io.unobserve(e.target))), { threshold: 0.12 })
+      document.querySelectorAll('.reveal').forEach((el) => io.observe(el))
+    </script>
+  </body>
+</html>
