@@ -14,7 +14,7 @@ robô, pequeno no canto.
 npm install
 npm run dev
 ```
-Abra http://localhost:4321/PortfolioBrito/
+Abra http://localhost:4321/
 
 > No Windows/PowerShell, se aparecer erro de "execução de scripts", use `npm.cmd install` e `npm.cmd run dev`.
 
@@ -31,3 +31,7 @@ Abra http://localhost:4321/PortfolioBrito/
 | Imagem do robô (vira partículas) | `public/robot/holo.webp` |
 
 Endereços das seções: `#projetos`, `#sobre`, `#contato`, `#tudo` (tudo sem conversa).
+
+## Publicar
+- **Netlify:** conecte o repositório; o arquivo `netlify.toml` já configura tudo (build `npm run build`, pasta `dist`).
+- **GitHub Pages** (em `/PortfolioBrito`): faça o build com a variável `BASE_PATH=/PortfolioBrito`.
