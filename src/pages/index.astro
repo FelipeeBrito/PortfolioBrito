@@ -18,13 +18,14 @@ const nav = [
 ---
 
 <Base title={`${profile.name} · Portfólio`} description={profile.headline}>
-  <!-- partículas (robô e transições) -->
-  <canvas id="holo" class="pointer-events-none fixed inset-0 z-30" aria-hidden="true"></canvas>
+  <!-- partículas das transições e a coruja 3D (cada uma no seu canvas) -->
+  <canvas id="fx" class="pointer-events-none fixed inset-0 z-30" aria-hidden="true"></canvas>
+  <canvas id="owl" class="pointer-events-none fixed left-0 top-0 z-30 origin-top-left opacity-0 transition-opacity duration-1000" aria-hidden="true"></canvas>
 
   <!-- topo -->
   <header class="fixed inset-x-0 top-0 z-40 flex items-center justify-between gap-3 px-4 py-4 sm:px-8 sm:py-6">
     <a href="#inicio" data-go="home" class="shrink-0 whitespace-nowrap font-mono text-xs tracking-[0.2em] text-muted transition hover:text-white" aria-label="Voltar ao início">
-      FB<span class="hidden sm:inline"> <span class="text-cyan">·</span> PORTFÓLIO</span>
+      OWLL<span class="hidden sm:inline"> <span class="text-cyan">·</span> FELIPE BRITO</span>
     </a>
     <nav id="nav" hidden class="flex items-center gap-1 sm:gap-2 lg:mr-auto lg:ml-8" aria-label="Seções">
       {nav.map(([id, label]) => (
@@ -38,7 +39,7 @@ const nav = [
     <!-- ===== INÍCIO: a IA conversa ===== -->
     <section id="home" class="view on shown min-h-svh flex-col items-center justify-center px-5 pb-10 pt-20 text-center">
       <h1 class="sr-only">{profile.name} — Portfólio de projetos com IA</h1>
-      <div id="robot-stage" class="aspect-[620/655] h-[min(46svh,420px)] sm:h-[min(56svh,560px)]" aria-hidden="true"></div>
+      <div id="robot-stage" class="aspect-square h-[min(42svh,380px)] cursor-pointer sm:h-[min(52svh,500px)]" aria-hidden="true"></div>
       <div class="mt-4 w-full max-w-3xl sm:mt-6">
         <p id="talk" class="min-h-[3.2em] text-[clamp(1.25rem,3.4vw,1.9rem)] font-medium leading-snug text-white" aria-live="polite"></p>
         <div id="chips" class="mt-6 flex flex-wrap justify-center gap-2.5 opacity-0 transition-opacity duration-500 sm:gap-3">
@@ -126,12 +127,12 @@ const nav = [
     </div>
   </main>
 
-  <!-- robozinho no canto (o desenho é feito no canvas; isto é a área clicável) -->
-  <button id="robot-mini" hidden type="button" class="fixed bottom-3 right-2 z-[45] aspect-[620/655] h-[92px] cursor-pointer rounded-full outline-none focus-visible:ring-2 focus-visible:ring-cyan lg:bottom-auto lg:right-5 lg:top-4 lg:h-[118px]" aria-label="Voltar a conversar com a IA" title="Voltar a conversar"></button>
+  <!-- coruja pequena no canto (o desenho é feito no canvas; isto é a área clicável) -->
+  <button id="robot-mini" hidden type="button" class="fixed bottom-3 right-2 z-[45] aspect-square h-[88px] cursor-pointer rounded-full outline-none focus-visible:ring-2 focus-visible:ring-cyan lg:bottom-auto lg:right-5 lg:top-4 lg:h-[112px]" aria-label="Voltar a conversar com a IA" title="Voltar a conversar"></button>
 
   <!-- balão da IA -->
   <div id="bubble" hidden class="fixed inset-x-2.5 bottom-[106px] z-50 rounded-2xl border border-cyan/35 bg-[#0c1430]/95 px-4 py-3 text-sm text-ink shadow-[0_0_30px_-10px_rgba(40,225,255,0.7)] backdrop-blur lg:inset-x-auto lg:bottom-auto lg:right-[150px] lg:top-6 lg:w-[330px]" role="status">
-    <p class="mb-1 font-mono text-[10px] tracking-[0.18em] text-cyan">● IA</p>
+    <p class="mb-1 font-mono text-[10px] tracking-[0.18em] text-cyan">● OWLL</p>
     <p id="bubble-text" class="leading-relaxed"></p>
     <div id="bubble-chips" class="mt-2.5 flex flex-wrap gap-1.5 empty:hidden"></div>
   </div>

@@ -3,7 +3,7 @@
  */
 export const conversa = {
   /** Primeira fala na tela inicial */
-  ola: 'Olá. Eu sou a IA deste portfólio. O que você quer conhecer?',
+  ola: 'Olá! Eu sou a Owll, a coruja deste portfólio. O que você quer conhecer?',
   /** Quando o visitante volta para a tela inicial */
   volta: 'O que mais você quer conhecer?',
   /** Botões da tela inicial */

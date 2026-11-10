@@ -51,7 +51,7 @@ body {
 .card:hover { transform: translateY(-3px); border-color: rgba(40, 225, 255, 0.5); box-shadow: 0 20px 50px -25px rgba(40, 225, 255, 0.6); }
 .is-scanning { border-color: var(--color-cyan) !important; box-shadow: 0 0 40px -10px rgba(40, 225, 255, 0.8) !important; }
 
-/* foto do GitHub com anel de luz (mesmo ciano dos olhos do robô) */
+/* foto do GitHub com anel de luz (mesmo ciano dos olhos da coruja) */
 .avatar-ring {
   display: block; border-radius: 50%; padding: 3px;
   background: conic-gradient(from 210deg, var(--color-cyan), var(--color-blue), var(--color-violet), var(--color-cyan));
@@ -83,7 +83,7 @@ body {
 .caret { display: inline-block; width: 3px; height: 1em; margin-left: 3px; vertical-align: -0.12em; background: var(--color-cyan); box-shadow: 0 0 10px var(--color-cyan); animation: caret 1s steps(1) infinite; }
 @keyframes caret { 50% { opacity: 0; } }
 
-/* balão da IA (perto do robozinho) */
+/* balão da IA (perto da coruja) */
 #bubble { transition: opacity 0.3s, transform 0.3s; }
 #bubble[hidden] { display: block; opacity: 0; transform: translateY(6px); pointer-events: none; }
 

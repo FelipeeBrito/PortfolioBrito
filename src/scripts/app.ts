@@ -1,4 +1,5 @@
-import { Holo, sampleShape } from './holo'
+import { Particles, sampleShape } from './particles'
+import type { Owl } from './owl'
 import { liveGithub, renderCards, renderProfile, timeAgo, type GhData } from '../lib/github'
 
 /**
@@ -7,8 +8,9 @@ import { liveGithub, renderCards, renderProfile, timeAgo, type GhData } from '..
  * Telas: home (a IA conversa) · projetos · sobre · contato · tudo (todas as seções).
  * O endereço acompanha a tela (#projetos, #sobre…), então dá para compartilhar o link.
  *
- * Transição: o robô se desfaz → as partículas formam o título e os cards da tela nova →
- * o conteúdo aparece → as partículas voltam a formar o robô, pequeno no canto.
+ * Personagem: a coruja 3D (owl.ts). Ela fica grande no início e voa para o canto nas seções.
+ * Transição: partículas saem da coruja → formam o título e os cards da tela nova →
+ * o conteúdo aparece → as partículas voltam para a coruja e somem.
  */
 
 type View = 'home' | 'projetos' | 'sobre' | 'contato' | 'tudo'
@@ -33,7 +35,9 @@ const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matc
 
 export async function initApp() {
   const data = JSON.parse($('conversa').textContent || '{}') as Data
-  const holo = new Holo($<HTMLCanvasElement>('holo'))
+  const fx = new Particles($<HTMLCanvasElement>('fx'))
+  let owl: Owl | null = null
+  const talking = (v: boolean) => owl && (owl.talking = v)
   const stage = $('robot-stage')
   const mini = $('robot-mini')
   const home = $('home')
@@ -50,18 +54,24 @@ export async function initApp() {
   let busy = false
   let typingId = 0
   let pending: View | null = null
+  let anchor: HTMLElement = stage
+  /** Define onde a coruja fica (grande no início, pequena no canto). */
+  function perch(el: HTMLElement) {
+    anchor = el
+    if (owl) owl.anchorEl = el
+  }
 
   // ---------------------------------------------------------------- fala digitada
   async function type(el: HTMLElement, text: string, speed = 24) {
     const id = ++typingId
-    holo.talking = true
+    talking(true)
     el.textContent = ''
     const caret = document.createElement('span')
     caret.className = 'caret'
     if (reduced()) {
       el.textContent = text
       el.append(caret)
-      holo.talking = false
+      talking(false)
       return
     }
     for (let i = 1; i <= text.length; i++) {
@@ -71,7 +81,7 @@ export async function initApp() {
       const ch = text[i - 1]
       await wait(ch === '.' || ch === '?' || ch === '!' ? speed * 9 : ch === ',' ? speed * 4 : speed)
     }
-    if (id === typingId) holo.talking = false
+    if (id === typingId) talking(false)
   }
 
   function say(text: string, buttons: { label: string; run: () => void }[] = []) {
@@ -103,7 +113,7 @@ export async function initApp() {
   // ---------------------------------------------------------------- projetos do GitHub (ao vivo)
   const grid = $('gh-grid')
   const cards = () => [...grid.querySelectorAll<HTMLElement>('[data-scan]')]
-  let latest = '' // data do projeto mais recente (para a fala do robô)
+  let latest = '' // data do projeto mais recente (para a fala da coruja)
 
   function renderGithub(d: GhData | null, failed = false) {
     const projects = d?.projects ?? []
@@ -147,7 +157,7 @@ export async function initApp() {
     scanning?.classList.remove('is-scanning')
     scanning = c
     c.classList.add('is-scanning')
-    holo.pulse()
+    owl?.cheer(900)
     const info = [
       c.dataset.lang && `linguagem ${c.dataset.lang}`,
       c.dataset.updated && `atualizado ${timeAgo(c.dataset.updated)}`,
@@ -200,7 +210,7 @@ export async function initApp() {
     if (next === view) return
     busy = true
     typingId++
-    holo.talking = false
+    talking(false)
     bubble.hidden = true
     if (push) history.pushState(null, '', next === 'home' ? location.pathname : `#${next}`)
     const fast = reduced()
@@ -209,16 +219,17 @@ export async function initApp() {
 
     // 1. a tela atual some
     sectionsOf(prev).forEach((el) => el.classList.remove('shown'))
-    if (!fast) holo.burst(prev === 'home' ? 1 : 0.6)
+    fx.burst(prev === 'home' ? 1 : 0.6)
     await wait(fast ? 0 : 350)
     hideAll()
     window.scrollTo(0, 0)
     chrome(next)
 
     if (next === 'home') {
-      // 2a. as partículas voltam a formar o robô grande
+      // 2a. a coruja voa de volta para o centro
       show('home', false)
-      holo.formRobot(stage)
+      perch(stage)
+      fx.gather()
       chips.style.opacity = '0'
       requestAnimationFrame(() => home.classList.add('shown'))
       await wait(fast ? 0 : 700)
@@ -228,13 +239,13 @@ export async function initApp() {
     } else {
       // 2b. a tela nova existe (invisível) para as partículas copiarem o formato dela
       show(next, false)
+      perch(mini) // a coruja já vai voando para o canto
       await new Promise((r) => requestAnimationFrame(r))
-      holo.formShape(sampleShape($('sections')))
+      fx.formShape(sampleShape($('sections')))
       await wait(fast ? 0 : 1250)
-      // 3. o conteúdo aparece e as partículas voltam a ser o robozinho do canto
+      // 3. o conteúdo aparece e as partículas voltam para a coruja, já no canto
       sectionsOf(next).forEach((el) => el.classList.add('shown'))
-      if (!fast) holo.burst(0.35)
-      holo.formRobot(mini)
+      fx.gather()
       await wait(fast ? 0 : 500)
       busy = false
       if (next === 'projetos') {
@@ -271,11 +282,11 @@ export async function initApp() {
     window.location.href = `mailto:${data.email}?subject=${encodeURIComponent('Contato pelo portfólio')}&body=${encodeURIComponent(body)}`
     form.reset()
     bubble.hidden = true
-    holo.burst(0.8)
-    holo.formShape(sampleShape($('sent-shape')))
+    owl?.cheer(2600)
+    fx.burst(0.8)
+    fx.formShape(sampleShape($('sent-shape')))
     await wait(reduced() ? 0 : 1600)
-    holo.burst(0.4)
-    holo.formRobot(mini)
+    fx.gather()
     say(data.enviado)
   })
 
@@ -284,15 +295,29 @@ export async function initApp() {
   if (data.gh) renderGithub(data.gh)
   liveGithub(data.site.github).then((d) => whenIdle(() => (d ? renderGithub(d) : data.gh || renderGithub(null, true))))
 
-  holo.formRobot(stage)
-  await holo.load(`${data.base}/robot/holo.webp`)
-  holo.start()
+  fx.start()
+  perch(stage)
+  stage.addEventListener('click', () => owl?.cheer())
+  // a coruja 3D carrega à parte, para o resto da página não esperar por ela
+  const owlReady = import('./owl')
+    .then(async ({ Owl }) => {
+      const o = new Owl($<HTMLCanvasElement>('owl'))
+      await o.load(`${data.base}/owl/owl.glb`)
+      owl = o
+      perch(anchor)
+      fx.origin = () => o.center()
+      o.start()
+    })
+    .catch(() => {
+      // sem 3D (navegador antigo ou falha ao carregar): mostra a coruja como imagem
+      for (const el of [stage, mini]) el.style.background = `url(${data.base}/owl/owl.png) center / contain no-repeat`
+    })
+  await Promise.race([owlReady, wait(3500)])
   const first = location.hash.slice(1) as View
   if (VIEWS.includes(first) && first !== 'home') {
-    await wait(reduced() ? 0 : 900)
     go(first, false)
   } else {
-    await wait(reduced() ? 0 : 1100)
+    await wait(reduced() ? 0 : 500)
     await type(talk, data.ola)
     chips.style.opacity = '1'
   }

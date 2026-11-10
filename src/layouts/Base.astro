@@ -19,9 +19,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '')
     <meta name="theme-color" content="#03050c" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={`${base}/robot/holo.webp`} />
-    <link rel="icon" type="image/webp" href={`${base}/robot/holo.webp`} />
-    <link rel="preload" as="image" href={`${base}/robot/holo.webp`} />
+    <meta property="og:image" content={`${base}/owl/og.jpg`} />
+    <link rel="icon" type="image/png" href={`${base}/favicon.png`} />
+    <link rel="preload" as="fetch" crossorigin href={`${base}/owl/owl.glb`} />
     <title>{title}</title>
     <script is:inline>document.documentElement.classList.add('js')</script>
   </head>

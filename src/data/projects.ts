@@ -38,7 +38,7 @@ export interface Project {
  */
 export const ajustes: Record<string, Partial<Pick<Project, 'description' | 'tags' | 'url'>>> = {
   PortfolioBrito: {
-    description: 'Este portfólio: uma IA feita de partículas que conversa com o visitante e monta cada seção.',
-    tags: ['Astro', 'Canvas', 'IA'],
+    description: 'Este portfólio: uma coruja-robô 3D que conversa com o visitante e monta cada seção com partículas.',
+    tags: ['Astro', 'Three.js', 'IA'],
   },
 }

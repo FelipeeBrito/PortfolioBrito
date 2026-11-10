@@ -1,12 +1,12 @@
 # PortfolioBrito 🤖
 
-Portfólio em que uma **IA feita de partículas** conversa com o visitante. Ao escolher uma opção,
-o robô holograma se desfaz, as partículas formam a seção escolhida e depois voltam a ser o
-robô, pequeno no canto.
+Portfólio apresentado pela **Owll**, uma coruja-robô 3D que conversa com o visitante: segue o mouse,
+pisca, fala e voa para o canto quando uma seção abre. Nas transições, partículas saem dela, formam o
+título e os cards da seção e voltam.
 
 ## Tecnologias
 - [Astro](https://astro.build) + TypeScript (site estático)
-- Canvas 2D para as partículas (sem bibliotecas 3D)
+- Three.js para a coruja 3D e Canvas 2D para as partículas
 - Tailwind CSS
 
 ## Rodar no computador
@@ -28,8 +28,9 @@ Abra http://localhost:4321/
 | Habilidades | `src/data/skills.ts` |
 | Conteúdo e layout das seções | `src/pages/index.astro` |
 | Navegação e transições | `src/scripts/app.ts` |
-| Motor de partículas do robô | `src/scripts/holo.ts` |
-| Imagem do robô (vira partículas) | `public/robot/holo.webp` |
+| Coruja 3D (esqueleto, olhos, movimentos) | `src/scripts/owl.ts` |
+| Partículas das transições | `src/scripts/particles.ts` |
+| Modelo 3D da coruja (e imagem reserva) | `public/owl/owl.glb`, `public/owl/owl.png` |
 
 Endereços das seções: `#projetos`, `#sobre`, `#contato`, `#tudo` (tudo sem conversa).
 
