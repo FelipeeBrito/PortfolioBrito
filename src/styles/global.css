@@ -51,6 +51,18 @@ body {
 .card:hover { transform: translateY(-3px); border-color: rgba(40, 225, 255, 0.5); box-shadow: 0 20px 50px -25px rgba(40, 225, 255, 0.6); }
 .is-scanning { border-color: var(--color-cyan) !important; box-shadow: 0 0 40px -10px rgba(40, 225, 255, 0.8) !important; }
 
+/* foto do GitHub com anel de luz (mesmo ciano dos olhos do robô) */
+.avatar-ring {
+  display: block; border-radius: 50%; padding: 3px;
+  background: conic-gradient(from 210deg, var(--color-cyan), var(--color-blue), var(--color-violet), var(--color-cyan));
+  box-shadow: 0 0 26px -4px rgba(40, 225, 255, 0.75);
+  animation: ring 3.2s ease-in-out infinite;
+  transition: transform 0.2s;
+}
+.avatar-ring:hover { transform: scale(1.04); }
+.avatar-ring img { display: block; border: 3px solid var(--color-bg); }
+@keyframes ring { 50% { box-shadow: 0 0 34px 0 rgba(40, 225, 255, 0.95); } }
+
 .meter { height: 6px; border-radius: 99px; background: rgba(255, 255, 255, 0.06); overflow: hidden; }
 .meter > span { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--color-blue), var(--color-cyan)); }
 
@@ -77,5 +89,5 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .js .view.on, #bubble { transition: none; }
-  .caret { animation: none; }
+  .caret, .avatar-ring { animation: none; }
 }

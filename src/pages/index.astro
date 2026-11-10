@@ -3,9 +3,11 @@ import Base from '../layouts/Base.astro'
 import { profile } from '../data/profile'
 import { skills } from '../data/skills'
 import { conversa } from '../data/conversa'
-import { loadProjects, thumb } from '../lib/projects'
+import { fetchGithub, renderCards, renderProfile } from '../lib/github'
 
-const projects = await loadProjects()
+// "Foto" dos dados do GitHub na hora de gerar o site. No navegador, os dados são buscados de novo.
+const gh = await fetchGithub(profile.github)
+const site = { name: profile.name, role: profile.role, github: profile.github }
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 const year = new Date().getFullYear()
 const nav = [
@@ -53,41 +55,19 @@ const nav = [
       <section id="projetos" class="view mx-auto max-w-6xl px-5 pb-36 pt-28 sm:px-8 lg:pb-24 lg:pt-36">
         <p class="eyebrow mb-3">Projetos</p>
         <h2 data-p="text" class="text-[clamp(2.6rem,7vw,4.25rem)] font-semibold leading-none tracking-tight text-white">Projetos</h2>
-        <p class="mt-4 max-w-xl text-muted">Criados com inteligência artificial — da ideia ao código publicado.</p>
-        <div id="filtro" class="mt-5 hidden flex-wrap items-center gap-2 font-mono text-xs text-muted">
+        <p class="mt-4 max-w-xl text-muted">Os mais recentes, direto do meu GitHub — criados com inteligência artificial, da ideia ao código publicado.</p>
+
+        <!-- cartão de perfil do GitHub (atualizado no navegador) -->
+        <div id="gh-profile" class="mt-8" set:html={renderProfile(gh?.profile ?? null, site, gh?.projects[0]?.updatedAt)} />
+
+        <div id="filtro" class="mt-6 hidden flex-wrap items-center gap-2 font-mono text-xs text-muted">
           filtro: <b id="filtro-nome" class="text-cyan"></b>
           <button type="button" data-filter="" class="chip chip-sm">limpar ✕</button>
         </div>
-        <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-7">
-          {projects.map((p, i) => (
-            <article
-              data-p="box"
-              class="card flex flex-col"
-              data-scan
-              data-name={p.name}
-              data-num={String(i + 1).padStart(2, '0')}
-              data-tags={p.tags.join('|').toLowerCase()}
-              data-lang={p.language ?? p.tags[0] ?? ''}
-              data-updated={p.updatedAt ?? ''}
-              data-stars={p.stars ?? ''}
-            >
-              <div class="relative aspect-[16/9] border-b border-white/5 bg-gradient-to-br from-navy via-[#1b1f5c] to-[#3a1d6e]">
-                {thumb(p) && <img src={thumb(p)} alt="" loading="lazy" class="h-full w-full object-cover opacity-85" onerror="this.remove()" />}
-              </div>
-              <div class="flex flex-1 flex-col p-5 sm:p-6">
-                <h3 class="text-lg font-semibold text-white">{p.name}</h3>
-                <p class="mt-2 flex-1 text-sm leading-relaxed text-muted">{p.description}</p>
-                <div class="mt-4 flex flex-wrap gap-1.5">
-                  {p.tags.map((t) => <span class="rounded-full border border-cyan/30 px-2.5 py-0.5 text-[11px] text-cyan">{t}</span>)}
-                </div>
-                <div class="mt-5 flex flex-wrap gap-2">
-                  {p.url && <a href={p.url} target="_blank" rel="noopener" class="chip chip-sm">Ver projeto ↗</a>}
-                  {p.repo && <a href={p.repo} target="_blank" rel="noopener" class="chip chip-sm">Código</a>}
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
+        <div id="gh-grid" class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-7" set:html={renderCards(gh?.projects ?? [])} />
+        <p class="mt-10 text-center">
+          <a href={`https://github.com/${profile.github}?tab=repositories`} target="_blank" rel="noopener" class="chip">Ver todos os projetos no GitHub ↗</a>
+        </p>
       </section>
 
       <!-- ===== SOBRE ===== -->
@@ -161,7 +141,7 @@ const nav = [
     <span data-p="text" class="text-[clamp(2.5rem,9vw,6rem)] font-semibold text-white">Enviado ✓</span>
   </div>
 
-  <script type="application/json" id="conversa" set:html={JSON.stringify({ ...conversa, email: profile.email, base })} />
+  <script type="application/json" id="conversa" set:html={JSON.stringify({ ...conversa, email: profile.email, base, site, gh }).replace(/</g, '\\u003c')} />
   <script>
     import { initApp } from '../scripts/app'
     initApp()

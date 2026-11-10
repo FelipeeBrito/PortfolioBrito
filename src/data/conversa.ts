@@ -15,7 +15,9 @@ export const conversa = {
   ],
   /** Fala ao chegar em cada seção */
   secoes: {
-    projetos: 'Estes são os projetos que o Felipe criou com IA. Passe o mouse num deles que eu te conto os detalhes.',
+    projetos: 'Estes são os projetos mais recentes do Felipe, direto do GitHub dele.',
+    /** Completa a fala acima quando há projetos ({quando} vira "há 2 dias", "ontem"…) */
+    projetosRecente: 'O último foi atualizado {quando}.',
     sobre: 'Este é o Felipe. Processos, qualidade e muita automação com inteligência artificial.',
     contato: 'Deixe uma mensagem. Eu entrego para ele.',
     tudo: 'Aqui está tudo de uma vez. Clique em mim para voltar a conversar.',

@@ -1,27 +1,44 @@
 /**
- * Projetos em destaque. Os repositórios públicos do GitHub também são
- * carregados automaticamente na hora do build (ver src/lib/github.ts).
- * Projetos listados aqui aparecem primeiro.
+ * PROJETOS — vêm direto do seu GitHub, sem precisar publicar o site de novo.
+ *
+ * O que aparece: os repositórios públicos atualizados mais recentemente
+ * (quantidade em `recentes`) + os que tiverem a topic de destaque.
+ * Nunca aparecem: forks, arquivados, o repositório do perfil e os que tiverem a topic de ocultar.
+ *
+ * Para controlar pelo GitHub: abra o repositório → "About" (engrenagem) → "Topics".
  */
+export const githubConfig = {
+  /** Quantos projetos recentes mostrar */
+  recentes: 6,
+  /** Topic que faz um repositório aparecer sempre, mesmo sendo antigo */
+  topicDestaque: 'portfolio',
+  /** Topic que esconde um repositório do site */
+  topicOcultar: 'ocultar',
+  /** Até quantos dias depois da última atualização o projeto ganha o selo "Novo" */
+  diasNovo: 7,
+}
+
 export interface Project {
   name: string
   description: string
   tags: string[]
+  /** Site do projeto (campo "Website" do repositório) */
   url?: string
-  repo?: string
-  status?: 'online' | 'em teste' | 'em construção'
-  /** Preenchidos automaticamente pelo GitHub (usados no escaneamento do robô) */
+  repo: string
   language?: string
-  updatedAt?: string
-  stars?: number
+  updatedAt: string
+  stars: number
+  /** Tem a topic de destaque */
+  destaque: boolean
 }
 
-export const featured: Project[] = [
-  {
-    name: 'PortfolioBrito',
+/**
+ * Ajustes opcionais por repositório (use o nome exato do repositório).
+ * Serve para trocar a descrição, as tags ou o link sem mexer no GitHub.
+ */
+export const ajustes: Record<string, Partial<Pick<Project, 'description' | 'tags' | 'url'>>> = {
+  PortfolioBrito: {
     description: 'Este portfólio: uma IA feita de partículas que conversa com o visitante e monta cada seção.',
     tags: ['Astro', 'Canvas', 'IA'],
-    repo: 'https://github.com/FelipeeBrito/PortfolioBrito',
-    status: 'online',
   },
-]
+}

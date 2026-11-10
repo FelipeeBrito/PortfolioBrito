@@ -1,4 +1,5 @@
 import { Holo, sampleShape } from './holo'
+import { liveGithub, renderCards, renderProfile, timeAgo, type GhData } from '../lib/github'
 
 /**
  * CONTROLE DA EXPERIÊNCIA
@@ -16,11 +17,14 @@ const VIEWS: View[] = ['home', 'projetos', 'sobre', 'contato', 'tudo']
 interface Data {
   ola: string
   volta: string
-  secoes: Record<Exclude<View, 'home'>, string>
+  secoes: Record<Exclude<View, 'home'>, string> & { projetosRecente: string }
   enviado: string
   semFiltro: string
   email: string
   base: string
+  site: { name: string; role: string; github: string }
+  /** dados do GitHub de quando o site foi gerado (pode ser null) */
+  gh: GhData | null
 }
 
 const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T
@@ -96,11 +100,26 @@ export async function initApp() {
     { passive: true },
   )
 
+  // ---------------------------------------------------------------- projetos do GitHub (ao vivo)
+  const grid = $('gh-grid')
+  const cards = () => [...grid.querySelectorAll<HTMLElement>('[data-scan]')]
+  let latest = '' // data do projeto mais recente (para a fala do robô)
+
+  function renderGithub(d: GhData | null, failed = false) {
+    const projects = d?.projects ?? []
+    latest = projects[0]?.updatedAt ?? ''
+    $('gh-profile').innerHTML = renderProfile(d?.profile ?? null, data.site, latest || undefined)
+    grid.innerHTML = renderCards(projects, failed ? 'erro' : 'carregando', data.site.github)
+    $('filtro').style.display = 'none'
+    scanning = null
+  }
+  /** Troca o conteúdo só quando não há transição em andamento (para não bagunçar as partículas). */
+  const whenIdle = (fn: () => void) => (busy ? void setTimeout(() => whenIdle(fn), 250) : fn())
+
   // ---------------------------------------------------------------- filtros de projetos
-  const cards = [...document.querySelectorAll<HTMLElement>('[data-scan]')]
   function filter(tag: string) {
     let shown = 0
-    for (const c of cards) {
+    for (const c of cards()) {
       const ok = !tag || (c.dataset.tags ?? '').split('|').includes(tag)
       c.style.display = ok ? '' : 'none'
       if (ok) shown++
@@ -111,7 +130,7 @@ export async function initApp() {
   }
   function tagButtons() {
     const count = new Map<string, number>()
-    cards.forEach((c) => (c.dataset.tags ?? '').split('|').filter(Boolean).forEach((t) => count.set(t, (count.get(t) ?? 0) + 1)))
+    cards().forEach((c) => (c.dataset.tags ?? '').split('|').filter(Boolean).forEach((t) => count.set(t, (count.get(t) ?? 0) + 1)))
     return [...count.entries()]
       .sort((a, b) => b[1] - a[1])
       .slice(0, 5)
@@ -120,37 +139,30 @@ export async function initApp() {
   document.querySelectorAll<HTMLElement>('[data-filter]').forEach((b) => b.addEventListener('click', () => filter(b.dataset.filter ?? '')))
 
   // ---------------------------------------------------------------- escaneamento ao passar o mouse
-  function timeAgo(iso: string) {
-    const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86400000)
-    if (Number.isNaN(days)) return ''
-    if (days <= 0) return 'hoje'
-    if (days === 1) return 'ontem'
-    if (days < 30) return `há ${days} dias`
-    const m = Math.floor(days / 30)
-    return m === 1 ? 'há 1 mês' : `há ${m} meses`
-  }
+  // (ouvimos a grade inteira, porque os cards são trocados quando chegam os dados do GitHub)
   let scanning: HTMLElement | null = null
-  for (const c of cards) {
-    c.addEventListener('pointerenter', (e) => {
-      if ((e as PointerEvent).pointerType === 'touch' || busy) return
-      scanning?.classList.remove('is-scanning')
-      scanning = c
-      c.classList.add('is-scanning')
-      holo.pulse()
-      const info = [
-        c.dataset.lang && `linguagem ${c.dataset.lang}`,
-        c.dataset.updated && `atualizado ${timeAgo(c.dataset.updated)}`,
-        c.dataset.stars !== '' && c.dataset.stars !== undefined && `${c.dataset.stars} ★`,
-      ]
-        .filter(Boolean)
-        .join(' · ')
-      say(`Projeto ${c.dataset.num}: ${c.dataset.name}.${info ? ' ' + info[0].toUpperCase() + info.slice(1) + '.' : ''}`)
-    })
-    c.addEventListener('pointerleave', () => {
-      c.classList.remove('is-scanning')
-      if (scanning === c) scanning = null
-    })
-  }
+  grid.addEventListener('pointerover', (e) => {
+    const c = (e.target as Element).closest<HTMLElement>('[data-scan]')
+    if (!c || c === scanning || e.pointerType === 'touch' || busy) return
+    scanning?.classList.remove('is-scanning')
+    scanning = c
+    c.classList.add('is-scanning')
+    holo.pulse()
+    const info = [
+      c.dataset.lang && `linguagem ${c.dataset.lang}`,
+      c.dataset.updated && `atualizado ${timeAgo(c.dataset.updated)}`,
+      c.dataset.stars && `${c.dataset.stars} ★`,
+    ]
+      .filter(Boolean)
+      .join(' · ')
+    say(`Projeto ${c.dataset.num}: ${c.dataset.name}.${info ? ' ' + info[0].toUpperCase() + info.slice(1) + '.' : ''}`)
+  })
+  grid.addEventListener('pointerout', (e) => {
+    const c = (e.target as Element).closest<HTMLElement>('[data-scan]')
+    if (!c || c.contains(e.relatedTarget as Node)) return
+    c.classList.remove('is-scanning')
+    if (scanning === c) scanning = null
+  })
 
   // ---------------------------------------------------------------- navegação entre telas
   const sectionsOf = (v: View): HTMLElement[] =>
@@ -225,7 +237,10 @@ export async function initApp() {
       holo.formRobot(mini)
       await wait(fast ? 0 : 500)
       busy = false
-      say(data.secoes[next], next === 'projetos' ? tagButtons() : [])
+      if (next === 'projetos') {
+        const recente = latest ? ' ' + data.secoes.projetosRecente.replace('{quando}', timeAgo(latest)) : ''
+        say(data.secoes.projetos + recente, tagButtons())
+      } else say(data.secoes[next])
     }
     if (pending) {
       const p = pending
@@ -265,6 +280,10 @@ export async function initApp() {
   })
 
   // ---------------------------------------------------------------- início
+  // GitHub: mostra já a versão de quando o site foi gerado e busca a atual em seguida
+  if (data.gh) renderGithub(data.gh)
+  liveGithub(data.site.github).then((d) => whenIdle(() => (d ? renderGithub(d) : data.gh || renderGithub(null, true))))
+
   holo.formRobot(stage)
   await holo.load(`${data.base}/robot/holo.webp`)
   holo.start()
