@@ -26,7 +26,7 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
 
 /**
- * CORUJA 3D (Owll)
+ * CORUJA 3D (OwllSkull)
  *
  * O modelo public/owl/owl.glb é uma peça só. Aqui ele ganha:
  *  - um esqueleto com pesos suaves (cabeça e duas asas), para girar sem rasgar a malha;

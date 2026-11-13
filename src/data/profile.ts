@@ -10,6 +10,7 @@ export const profile = {
     'Este portfólio reúne esses projetos — cada um saiu do papel com a ajuda da IA, da ideia ao código publicado.',
   ],
   github: 'FelipeeBrito',
+  // Enquanto estes dois forem os de exemplo, o site esconde o formulário e os botões de E-mail e LinkedIn.
   email: 'seu-email@exemplo.com',
   linkedin: 'https://www.linkedin.com/',
 }

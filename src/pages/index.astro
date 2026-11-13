@@ -8,6 +8,10 @@ import { fetchGithub, renderCards, renderProfile } from '../lib/github'
 // "Foto" dos dados do GitHub na hora de gerar o site. No navegador, os dados são buscados de novo.
 const gh = await fetchGithub(profile.github)
 const site = { name: profile.name, role: profile.role, github: profile.github }
+// enquanto o e-mail e o LinkedIn de src/data/profile.ts forem os de exemplo, o site não mostra canais falsos
+const temEmail = !profile.email.includes('exemplo')
+const temLinkedin = profile.linkedin.includes('/in/')
+const falas = temEmail ? conversa : { ...conversa, secoes: { ...conversa.secoes, contato: conversa.secoes.contatoSemEmail } }
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 const year = new Date().getFullYear()
 const nav = [
@@ -25,7 +29,7 @@ const nav = [
   <!-- topo -->
   <header class="fixed inset-x-0 top-0 z-40 flex items-center justify-between gap-3 px-4 py-4 sm:px-8 sm:py-6">
     <a href="#inicio" data-go="home" class="shrink-0 whitespace-nowrap font-mono text-xs tracking-[0.2em] text-muted transition hover:text-white" aria-label="Voltar ao início">
-      OWLL<span class="hidden sm:inline"> <span class="text-cyan">·</span> FELIPE BRITO</span>
+      OWLLSKULL<span class="hidden sm:inline"> <span class="text-cyan">·</span> FELIPE BRITO</span>
     </a>
     <nav id="nav" hidden class="flex items-center gap-1 sm:gap-2 lg:mr-auto lg:ml-8" aria-label="Seções">
       {nav.map(([id, label]) => (
@@ -104,7 +108,7 @@ const nav = [
         <p class="eyebrow mb-3">Contato</p>
         <h2 data-p="text" class="text-[clamp(2.6rem,7vw,4.25rem)] font-semibold leading-none tracking-tight text-white">Vamos conversar?</h2>
         <div class="mt-10 grid gap-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
-          <form id="contact" data-p="box" class="card space-y-5 p-6 sm:p-8">
+          <form id="contact" hidden={!temEmail} data-p={temEmail ? 'box' : undefined} class="card space-y-5 p-6 sm:p-8">
             <div class="grid gap-5 sm:grid-cols-2">
               <label class="block text-sm text-muted">Nome<input required name="nome" autocomplete="name" class="field" /></label>
               <label class="block text-sm text-muted">E-mail<input required type="email" name="email" autocomplete="email" class="field" /></label>
@@ -112,11 +116,18 @@ const nav = [
             <label class="block text-sm text-muted">Mensagem<textarea required name="mensagem" rows="5" class="field"></textarea></label>
             <button type="submit" class="chip border-cyan/60 text-white">Enviar mensagem →</button>
           </form>
+          {!temEmail && (
+            <div data-p="box" class="card flex flex-col items-start gap-4 p-6 sm:p-8">
+              <p class="text-lg text-white">O formulário de mensagens está sendo ligado.</p>
+              <p class="text-muted">Por enquanto, o caminho mais rápido é o GitHub.</p>
+              <a href={`https://github.com/${profile.github}`} target="_blank" rel="noopener" class="chip border-cyan/60 text-white">Abrir meu GitHub ↗</a>
+            </div>
+          )}
           <div data-p="box" class="card flex flex-col gap-3 p-6 text-sm sm:p-8">
             <p class="eyebrow mb-1">Canais diretos</p>
             <a href={`https://github.com/${profile.github}`} target="_blank" rel="noopener" class="chip justify-between">GitHub <span class="text-cyan">↗</span></a>
-            <a href={profile.linkedin} target="_blank" rel="noopener" class="chip justify-between">LinkedIn <span class="text-cyan">↗</span></a>
-            <a href={`mailto:${profile.email}`} class="chip justify-between">E-mail <span class="text-cyan">↗</span></a>
+            {temLinkedin && <a href={profile.linkedin} target="_blank" rel="noopener" class="chip justify-between">LinkedIn <span class="text-cyan">↗</span></a>}
+            {temEmail && <a href={`mailto:${profile.email}`} class="chip justify-between">E-mail <span class="text-cyan">↗</span></a>}
           </div>
         </div>
       </section>
@@ -132,7 +143,7 @@ const nav = [
 
   <!-- balão da IA -->
   <div id="bubble" hidden class="fixed inset-x-2.5 bottom-[106px] z-50 rounded-2xl border border-cyan/35 bg-[#0c1430]/95 px-4 py-3 text-sm text-ink shadow-[0_0_30px_-10px_rgba(40,225,255,0.7)] backdrop-blur lg:inset-x-auto lg:bottom-auto lg:right-[150px] lg:top-6 lg:w-[330px]" role="status">
-    <p class="mb-1 font-mono text-[10px] tracking-[0.18em] text-cyan">● OWLL</p>
+    <p class="mb-1 font-mono text-[10px] tracking-[0.18em] text-cyan">● OWLLSKULL</p>
     <p id="bubble-text" class="leading-relaxed"></p>
     <div id="bubble-chips" class="mt-2.5 flex flex-wrap gap-1.5 empty:hidden"></div>
   </div>
@@ -142,7 +153,7 @@ const nav = [
     <span data-p="text" class="text-[clamp(2.5rem,9vw,6rem)] font-semibold text-white">Enviado ✓</span>
   </div>
 
-  <script type="application/json" id="conversa" set:html={JSON.stringify({ ...conversa, email: profile.email, base, site, gh }).replace(/</g, '\\u003c')} />
+  <script type="application/json" id="conversa" set:html={JSON.stringify({ ...falas, email: profile.email, base, site, gh }).replace(/</g, '\\u003c')} />
   <script>
     import { initApp } from '../scripts/app'
     initApp()

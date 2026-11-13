@@ -1,6 +1,6 @@
 # PortfolioBrito 🤖
 
-Portfólio apresentado pela **Owll**, uma coruja-robô 3D que conversa com o visitante: segue o mouse,
+Portfólio apresentado pela **OwllSkull**, uma coruja-robô 3D que conversa com o visitante: segue o mouse,
 pisca, fala e voa para o canto quando uma seção abre. Nas transições, partículas saem dela, formam o
 título e os cards da seção e voltam.
 
